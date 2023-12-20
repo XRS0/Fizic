@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Функция для рассчета изменения температуры
 def calculate_temperature_change(mass_processor, specific_heat_processor, mass_cooler, specific_heat_cooler):
     # Формула: ΔT = Q / (m * C)
-    # Предположим, что количество тепла (Q) равно 100 для примера
+    # По условию проекта, для примера количество тепла (Q) равно 100
     heat = 100
     
     # Рассчитываем изменение температуры для процессора
@@ -19,13 +19,15 @@ def calculate_temperature_change(mass_processor, specific_heat_processor, mass_c
 
     return delta_t_cooler
 
-# Ввод данных от пользователя
-mass_processor_values = [float(x) for x in input("Введите значения массы процессора (кг) через запятую: ").split(',')]
-specific_heat_processor_values = [float(x) for x in input("Введите значения удельной теплоемкости процессора (Дж/(г*°C)) через запятую: ").split(',')]
-mass_cooler_values = [float(x) for x in input("Введите значения массы охлаждающего элемента (кг) через запятую: ").split(',')]
-specific_heat_cooler_values = [float(x) for x in input("Введите значения удельной теплоемкости охлаждающего элемента (Дж/(г*°C)) через запятую: ").split(',')]
 
-# Создание DataFrame с введенными данными
+print("Введите данные: \n")
+# Ввод данных от пользователя
+mass_processor_values = [float(x) for x in input("Введите значения массы процессора (кг) через пробел: ").split(' ')]
+specific_heat_processor_values = [float(x) for x in input("Введите значения удельной теплоемкости процессора (Дж/(г*°C)) через пробел: ").split(' ')]
+mass_cooler_values = [float(x) for x in input("Введите значения массы охлаждающего элемента (кг) через пробел: ").split(' ')]
+specific_heat_cooler_values = [float(x) for x in input("Введите значения удельной теплоемкости охлаждающего элемента (Дж/(г*°C)) через пробел: ").split(' ')]
+
+# Создание хешмапа с введенными данными
 data = {
     'Масса процессора (кг)': mass_processor_values,
     'Удельная теплоемкость процессора (Дж/(г*°C))': specific_heat_processor_values,
@@ -35,17 +37,17 @@ data = {
 
 df = pd.DataFrame(data)
 
-# Рассчитываем изменение температуры и добавляем в DataFrame
+# Рассчитываем изменение температуры и добавляем в ранее созданную хешмапу
 df['Изменение температуры охлаждающего элемента (°C)'] = df.apply(
     lambda row: calculate_temperature_change(row['Масса процессора (кг)'], row['Удельная теплоемкость процессора (Дж/(г*°C))'],
                                              row['Масса охлаждающего элемента (кг)'], row['Удельная теплоемкость охлаждающего элемента (Дж/(г*°C))']),
                                              axis=1
 )
 
-# Сохранение в Excel-файл
+# Сохранение в Excel-файл по условию проекта
 df.to_excel("temperature_change_graph_cooler_pandas_variable.xlsx", index=False)
 
-# Построение графика
+# Построение графика по условию проекта
 plt.plot(df.index, df['Изменение температуры охлаждающего элемента (°C)'], marker='o')
 plt.title('Изменение температуры охлаждающего элемента')
 plt.xlabel('Номер значения')
